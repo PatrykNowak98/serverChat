@@ -36,6 +36,17 @@ def handle(client):
 					print(f'{name_to_ban} was banned!')
 				else:
 					client.send('Command was refused!'.encode('ascii'))
+			elif msg.decode('ascii').startswith('USERS'):
+				if nicknames[clients.index(client)] == 'admin':
+					client.send(f'Online members of the chat: {nicknames}'.encode('ascii'))
+				else:
+					client.send('Command was refused!'.encode('ascii'))
+			elif msg.decode('ascii').startswith('BLIST'):
+				if nicknames[clients.index(client)] == 'admin':
+					with open('bans.txt') as f:
+						client.send(f'List of banned users: \n{f.read()}'.encode('ascii'))
+				else:
+					client.send('Command was refused!'.encode('ascii'))
 			else:
 				brodcast(message)
 		except:
@@ -49,9 +60,6 @@ def handle(client):
 
 
 def receive():
-	"""
-	This is the main method for the server.
-	"""
 	while True:
 		client, address = server.accept() 
 		print(f'Connected with {str(address)}')
@@ -89,14 +97,14 @@ def receive():
 
 def kick_user(name):
 	if name in nicknames:
-		name_index = nicknames.index(name)
-		client_to_kick = clients[name_index]
-		clients.remove(client_to_kick)
-		client_to_kick.send('You were kicked by an admin!'.encode('ascii'))
-		client_to_kick.close()
-		nicknames.remove(name)
-		brodcast(f'{name} was kicked by the admin!'.encode('ascii'))
-
+		if name != "admin":
+			name_index = nicknames.index(name)
+			client_to_kick = clients[name_index]
+			clients.remove(client_to_kick)
+			client_to_kick.send('You were kicked by an admin!'.encode('ascii'))
+			client_to_kick.close()
+			nicknames.remove(name)
+			brodcast(f'{name} was kicked by the admin!'.encode('ascii'))
 
 print("Server is listening...")
 receive()

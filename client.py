@@ -50,6 +50,10 @@ def write():
 					client.send(f'KICK {message[len(nickname)+2+6:]}'.encode('ascii'))
 				if message[len(nickname)+2:].startswith('/ban'):
 					client.send(f'BAN {message[len(nickname)+2+5:]}'.encode('ascii'))
+				if message[len(nickname) + 2:].startswith('/users'):
+					client.send(f'USERS {message[len(nickname) + 2 + 7:]}'.encode('ascii'))
+				if message[len(nickname) + 2:].startswith('/blist'):
+					client.send(f'BLIST {message[len(nickname) + 2 + 7:]}'.encode('ascii'))
 			else:
 				print("Command can only be executed by the admin!")
 		else:
