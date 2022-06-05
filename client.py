@@ -54,6 +54,8 @@ def write():
 					client.send(f'USERS {message[len(nickname) + 2 + 7:]}'.encode('ascii'))
 				if message[len(nickname) + 2:].startswith('/blist'):
 					client.send(f'BLIST {message[len(nickname) + 2 + 7:]}'.encode('ascii'))
+				if message[len(nickname)+2:].startswith('/unban'):
+					client.send(f'UNBAN {message[len(nickname)+2+7:]}'.encode('ascii'))
 			else:
 				print("Command can only be executed by the admin!")
 		else:

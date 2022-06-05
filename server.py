@@ -1,5 +1,6 @@
 import threading
 import socket
+import re
 
 host = '127.0.0.1'
 port = 5555
@@ -45,6 +46,16 @@ def handle(client):
 				if nicknames[clients.index(client)] == 'admin':
 					with open('bans.txt') as f:
 						client.send(f'List of banned users: \n{f.read()}'.encode('ascii'))
+				else:
+					client.send('Command was refused!'.encode('ascii'))
+			elif msg.decode('ascii').startswith('UNBAN'):
+				if nicknames[clients.index(client)] == 'admin':
+					name_to_ban = msg.decode('ascii')[6:]
+					fileName = r'C:\Users\ASUS\Desktop\Dokumenty\serverChat\bans.txt'
+					string = open(fileName).read()
+					new_str = re.sub(f'{name_to_ban}', '', string)
+					open(fileName, 'w').write(new_str)
+					print(f'{name_to_ban} was unbanned!')
 				else:
 					client.send('Command was refused!'.encode('ascii'))
 			else:
